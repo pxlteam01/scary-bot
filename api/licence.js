@@ -4,8 +4,8 @@
 
 const axios = require('axios');
 
-const GITHUB_USERNAME = process.env.GITHUB_USERNAME || 'YOUR_USERNAME';
-const GITHUB_REPO = process.env.GITHUB_REPO || 'scary-bot-licences';
+const GITHUB_USERNAME = process.env.GITHUB_USERNAME || 'pxlteam01';
+const GITHUB_REPO = process.env.GITHUB_REPO || 'licence';
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN || 'YOUR_TOKEN';
 
 const GITHUB_API_URL = `https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/stats.json`;
