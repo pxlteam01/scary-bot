@@ -8,12 +8,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- ============ BACKGROUND ANIMATION ============ -->
+    <!-- ============ BACKGROUND PARTIKEL UNGU ============ -->
     <div class="bg-animation">
         <div class="glow-1"></div>
         <div class="glow-2"></div>
         <div class="glow-3"></div>
-        <div class="particles" id="particles"></div>
+        <canvas id="particleCanvas"></canvas>
     </div>
 
     <!-- ============ MAIN CONTAINER ============ -->
@@ -32,7 +32,7 @@
 
         <!-- Main Card -->
         <div class="card" id="mainCard">
-            <!-- Status Website (Tutup) -->
+            <!-- Status Website -->
             <div class="website-status" id="websiteStatus">
                 <div class="status-content">
                     <span class="status-icon">🔴</span>
@@ -45,30 +45,75 @@
             <div class="content" id="mainContent">
                 <!-- Title -->
                 <div class="title-section">
-                    <h2 class="glitch-text" data-text="FREE LICENCE">🎯 FREE LICENCE</h2>
+                    <h2 class="glitch-text">🎯 FREE LICENCE</h2>
                     <p class="subtitle">Dapatkan licence key gratis untuk Scary Bot V1</p>
                     <div class="divider"></div>
                 </div>
 
+                <!-- ============ USER COUNTER ============ -->
+                <div class="user-counter">
+                    <div class="counter-box">
+                        <span class="counter-icon">👥</span>
+                        <span class="counter-label">Total Pengguna</span>
+                        <span class="counter-number" id="totalUsers">0</span>
+                    </div>
+                </div>
+
+                <!-- ============ STEP PROGRESS ============ -->
+                <div class="steps-container">
+                    <div class="step-item" id="step1">
+                        <div class="step-number">1</div>
+                        <div class="step-label">Klik Iklan</div>
+                        <div class="step-status" id="stepStatus1">⏳</div>
+                    </div>
+                    <div class="step-line" id="line1"></div>
+                    <div class="step-item" id="step2">
+                        <div class="step-number">2</div>
+                        <div class="step-label">Tunggu 3s</div>
+                        <div class="step-status" id="stepStatus2">⏳</div>
+                    </div>
+                    <div class="step-line" id="line2"></div>
+                    <div class="step-item" id="step3">
+                        <div class="step-number">3</div>
+                        <div class="step-label">Verifikasi</div>
+                        <div class="step-status" id="stepStatus3">⏳</div>
+                    </div>
+                    <div class="step-line" id="line3"></div>
+                    <div class="step-item" id="step4">
+                        <div class="step-number">4</div>
+                        <div class="step-label">Ambil Licence</div>
+                        <div class="step-status" id="stepStatus4">⏳</div>
+                    </div>
+                    <div class="step-line" id="line4"></div>
+                    <div class="step-item" id="step5">
+                        <div class="step-number">5</div>
+                        <div class="step-label">Selesai! 🎉</div>
+                        <div class="step-status" id="stepStatus5">⏳</div>
+                    </div>
+                </div>
+
+                <!-- Progress Bar -->
+                <div class="progress-container">
+                    <div class="progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+                <div class="progress-text" id="progressText">0% - Mulai!</div>
+
                 <!-- Iklan Section -->
                 <div class="ads-section" id="adsSection">
-                    <div class="ads-header">
-                        <span class="ads-icon">📢</span>
-                        <span class="ads-title">Selesaikan 5 Iklan untuk Unlock Licence</span>
-                        <span class="ads-progress" id="adsProgress">0/5</span>
-                    </div>
-                    
-                    <!-- Progress Bar -->
-                    <div class="ads-progress-container">
-                        <div class="ads-progress-bar" id="adsProgressBar" style="width: 0%"></div>
-                    </div>
-                    
-                    <div class="ads-grid" id="adsGrid">
-                        <!-- Ads akan di generate oleh JS -->
-                    </div>
-
-                    <div class="ads-info">
-                        <span>💡 Klik iklan, buka tab baru, tunggu 3 detik, lalu kembali</span>
+                    <div class="ads-box" id="adBox">
+                        <div class="ad-content">
+                            <span class="ad-icon" id="adIcon">🛒</span>
+                            <span class="ad-title" id="adTitle">Shopee</span>
+                            <span class="ad-sub" id="adSub">Belanja Online</span>
+                            <div class="ad-countdown" id="adCountdown" style="display: none;">
+                                <span class="countdown-number" id="countdownNumber">3</span>
+                                <span class="countdown-label">detik</span>
+                            </div>
+                            <button class="btn-ad" id="btnAd" onclick="handleAdClick()">
+                                👆 Klik Iklan
+                            </button>
+                            <div class="ad-status" id="adStatus">Selesaikan 1 iklan untuk unlock licence</div>
+                        </div>
                     </div>
                 </div>
 
@@ -81,9 +126,7 @@
                     
                     <div class="licence-box" id="licenceBox">
                         <div class="licence-key" id="licenceKey">SCARY-ABCD-EFGH-IJKL</div>
-                        <button class="btn-copy" onclick="copyLicence()">
-                            📋 Copy
-                        </button>
+                        <button class="btn-copy" onclick="copyLicence()">📋 Copy</button>
                     </div>
 
                     <div class="licence-info">
@@ -105,7 +148,7 @@
                         <button class="btn-primary" onclick="window.open('https://t.me/your_bot', '_blank')">
                             💬 Beli Licence VIP
                         </button>
-                        <button class="btn-secondary" onclick="window.open('https://github.com/your_username/scary-bot-licences', '_blank')">
+                        <button class="btn-secondary" onclick="window.open('https://github.com/pxlteam01/licence', '_blank')">
                             ⭐ GitHub
                         </button>
                     </div>
@@ -114,16 +157,19 @@
                 <!-- Loading -->
                 <div class="loading-section" id="loadingSection" style="display: none;">
                     <div class="loader"></div>
-                    <span class="loading-text">⏳ Mendapatkan licence dari server...</span>
-                    <span class="loading-sub">Mohon tunggu sebentar</span>
+                    <span class="loading-text">⏳ Mencari licence tersedia...</span>
+                    <span class="loading-sub">Memeriksa server GitHub</span>
                 </div>
             </div>
 
             <!-- Footer -->
             <div class="footer">
+                <div class="footer-user">
+                    <span>👥 <span id="totalUsersCount">0</span> Total Pengguna</span>
+                </div>
                 <div class="footer-links">
                     <a href="#" onclick="window.open('https://t.me/your_bot', '_blank')">💬 Telegram</a>
-                    <a href="#" onclick="window.open('https://github.com/your_username', '_blank')">🐙 GitHub</a>
+                    <a href="#" onclick="window.open('https://github.com/pxlteam01', '_blank')">🐙 GitHub</a>
                     <a href="#" onclick="window.open('https://youtube.com', '_blank')">▶️ YouTube</a>
                 </div>
                 <div class="footer-copy">
@@ -133,7 +179,6 @@
         </div>
     </div>
 
-    <!-- ============ SCRIPTS ============ -->
     <script src="script.js"></script>
 </body>
 </html>
