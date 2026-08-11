@@ -1,0 +1,16 @@
+{
+    "name": "scary-bot-website",
+    "version": "1.0.0",
+    "description": "Scary Bot Website - Licence Claimer",
+    "main": "index.html",
+    "scripts": {
+        "dev": "vercel dev",
+        "deploy": "vercel deploy --prod"
+    },
+    "dependencies": {
+        "axios": "^1.6.0"
+    },
+    "devDependencies": {
+        "vercel": "^33.0.0"
+    }
+}
