@@ -32,7 +32,7 @@
 
         <!-- Main Card -->
         <div class="card" id="mainCard">
-            <!-- Status Website -->
+            <!-- Status Website (Tutup) -->
             <div class="website-status" id="websiteStatus">
                 <div class="status-content">
                     <span class="status-icon">🔴</span>
@@ -58,12 +58,17 @@
                         <span class="ads-progress" id="adsProgress">0/5</span>
                     </div>
                     
+                    <!-- Progress Bar -->
+                    <div class="ads-progress-container">
+                        <div class="ads-progress-bar" id="adsProgressBar" style="width: 0%"></div>
+                    </div>
+                    
                     <div class="ads-grid" id="adsGrid">
                         <!-- Ads akan di generate oleh JS -->
                     </div>
 
                     <div class="ads-info">
-                        <span>💡 Klik iklan, tunggu 3 detik, lalu klik "Selesai"</span>
+                        <span>💡 Klik iklan, buka tab baru, tunggu 3 detik, lalu kembali</span>
                     </div>
                 </div>
 
@@ -100,22 +105,26 @@
                         <button class="btn-primary" onclick="window.open('https://t.me/your_bot', '_blank')">
                             💬 Beli Licence VIP
                         </button>
+                        <button class="btn-secondary" onclick="window.open('https://github.com/your_username/scary-bot-licences', '_blank')">
+                            ⭐ GitHub
+                        </button>
                     </div>
                 </div>
 
                 <!-- Loading -->
                 <div class="loading-section" id="loadingSection" style="display: none;">
                     <div class="loader"></div>
-                    <span class="loading-text">Mendapatkan licence...</span>
+                    <span class="loading-text">⏳ Mendapatkan licence dari server...</span>
+                    <span class="loading-sub">Mohon tunggu sebentar</span>
                 </div>
             </div>
 
             <!-- Footer -->
             <div class="footer">
                 <div class="footer-links">
-                    <a href="#" onclick="window.open('https://t.me/your_bot', '_blank')">Telegram</a>
-                    <a href="#" onclick="window.open('https://github.com/your_username', '_blank')">GitHub</a>
-                    <a href="#" onclick="window.open('https://youtube.com', '_blank')">YouTube</a>
+                    <a href="#" onclick="window.open('https://t.me/your_bot', '_blank')">💬 Telegram</a>
+                    <a href="#" onclick="window.open('https://github.com/your_username', '_blank')">🐙 GitHub</a>
+                    <a href="#" onclick="window.open('https://youtube.com', '_blank')">▶️ YouTube</a>
                 </div>
                 <div class="footer-copy">
                     <span>© 2024 Scary Bot - By Tuan Kepala CPY</span>
