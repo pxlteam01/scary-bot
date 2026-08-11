@@ -1,5 +1,5 @@
 // ========================================
-// SCARY BOT - SCRIPT (MTH STYLE)
+// SCARY BOT - SCRIPT (MTH STYLE - FIXED)
 // BY TUAN KEPALA CPY
 // ========================================
 
@@ -12,7 +12,7 @@ const GITHUB_STATS_URL = `https://raw.githubusercontent.com/${GITHUB_USERNAME}/$
 
 // ============ STATE ============
 let state = {
-    currentStep: 0, // 0-5
+    currentStep: 0,
     adCompleted: false,
     adWaiting: false,
     isProcessing: false,
@@ -20,7 +20,8 @@ let state = {
     totalAds: 5,
     adsCompleted: 0,
     currentAdIndex: 0,
-    adsList: []
+    adsList: [],
+    isInitialized: false
 };
 
 // ============ DAFTAR IKLAN ============
@@ -46,16 +47,20 @@ const ADS_LIST = [
 ];
 
 // ============ INIT ============
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('🚀 Website loaded!');
     initParticles();
     updateUserCounter();
     initAds();
     updateUI();
+    state.isInitialized = true;
 });
 
 // ============ PARTICLES ============
 function initParticles() {
     const canvas = document.getElementById('particleCanvas');
+    if (!canvas) return;
+    
     const ctx = canvas.getContext('2d');
     let width, height;
     let particles = [];
@@ -82,7 +87,6 @@ function initParticles() {
             this.x += this.speedX;
             this.y += this.speedY;
             this.pulse += this.pulseSpeed;
-            
             if (this.x < 0 || this.x > width) this.speedX *= -1;
             if (this.y < 0 || this.y > height) this.speedY *= -1;
         }
@@ -94,7 +98,6 @@ function initParticles() {
             ctx.fillStyle = `rgba(155, 77, 255, ${opacity})`;
             ctx.fill();
             
-            // Glow
             const gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.size * 5);
             gradient.addColorStop(0, `rgba(155, 77, 255, ${opacity * 0.15})`);
             gradient.addColorStop(1, 'rgba(155, 77, 255, 0)');
@@ -105,14 +108,12 @@ function initParticles() {
         }
     }
 
-    // Connect particles
     function drawLines() {
         for (let i = 0; i < particles.length; i++) {
             for (let j = i + 1; j < particles.length; j++) {
                 const dx = particles[i].x - particles[j].x;
                 const dy = particles[i].y - particles[j].y;
                 const distance = Math.sqrt(dx * dx + dy * dy);
-                
                 if (distance < 100) {
                     const opacity = (1 - distance / 100) * 0.12;
                     ctx.beginPath();
@@ -146,7 +147,8 @@ async function updateUserCounter() {
         const response = await fetch(GITHUB_STATS_URL, { cache: 'no-store' });
         if (response.ok) {
             const data = await response.json();
-            document.getElementById('totalUsers').textContent = data.total_users || 0;
+            const el = document.getElementById('totalUsers');
+            if (el) el.textContent = data.total_users || 0;
         }
     } catch (e) {
         console.log('⚠️ Gagal ambil stats:', e);
@@ -161,48 +163,92 @@ function initAds() {
     state.adsCompleted = 0;
     state.currentAdIndex = 0;
     state.currentStep = 0;
+    state.adCompleted = false;
+    state.adWaiting = false;
+    state.isProcessing = false;
     
+    console.log('📦 Ads initialized:', state.adsList.length, 'ads');
     showAd(0);
 }
 
 function showAd(index) {
+    console.log('📢 Showing ad:', index);
+    
     if (index >= state.adsList.length) {
-        // Semua iklan selesai, ambil licence
+        console.log('✅ All ads completed! Getting licence...');
         getLicence();
         return;
     }
     
     const ad = state.adsList[index];
-    document.getElementById('adIcon').textContent = ad.icon;
-    document.getElementById('adTitle').textContent = ad.title;
-    document.getElementById('adSub').textContent = ad.sub;
+    const iconEl = document.getElementById('adIcon');
+    const titleEl = document.getElementById('adTitle');
+    const subEl = document.getElementById('adSub');
+    const btn = document.getElementById('btnAd');
+    const countdownEl = document.getElementById('adCountdown');
+    const statusEl = document.getElementById('adStatus');
+    
+    if (iconEl) iconEl.textContent = ad.icon;
+    if (titleEl) titleEl.textContent = ad.title;
+    if (subEl) subEl.textContent = ad.sub;
     
     // Reset button
-    const btn = document.getElementById('btnAd');
-    btn.disabled = false;
-    btn.className = 'btn-ad';
-    btn.innerHTML = '<span class="btn-text">▶ Continue to Step</span>';
+    if (btn) {
+        btn.disabled = false;
+        btn.className = 'btn-ad';
+        btn.innerHTML = '<span class="btn-text">▶ Continue to Step</span>';
+        // Re-attach event listener
+        btn.onclick = function() {
+            console.log('🔘 Button clicked!');
+            handleAdClick();
+        };
+    }
     
-    document.getElementById('adCountdown').style.display = 'none';
-    document.getElementById('adStatus').className = 'ad-status';
-    document.getElementById('adStatus').innerHTML = `
-        <span class="status-icon">🔒</span>
-        <span class="status-text">Complete ad ${index + 1} of ${state.adsList.length} to continue</span>
-    `;
+    if (countdownEl) countdownEl.style.display = 'none';
+    
+    if (statusEl) {
+        statusEl.className = 'ad-status';
+        statusEl.innerHTML = `
+            <span class="status-icon">🔒</span>
+            <span class="status-text">Complete ad ${index + 1} of ${state.adsList.length} to continue</span>
+        `;
+    }
     
     state.adCompleted = false;
     state.adWaiting = false;
     state.currentStep = index + 1;
+    state.currentAdIndex = index;
     
-    // Update progress
     updateUI();
 }
 
 // ============ HANDLE AD CLICK ============
 function handleAdClick() {
-    if (state.isProcessing) return;
-    if (state.adCompleted) return;
-    if (state.adWaiting) return;
+    console.log('🖱️ handleAdClick called!');
+    console.log('State:', { 
+        isProcessing: state.isProcessing, 
+        adCompleted: state.adCompleted, 
+        adWaiting: state.adWaiting,
+        currentAdIndex: state.currentAdIndex,
+        adsCompleted: state.adsCompleted
+    });
+    
+    if (state.isProcessing) {
+        console.log('⏳ Already processing...');
+        return;
+    }
+    if (state.adCompleted) {
+        console.log('✅ Already completed...');
+        return;
+    }
+    if (state.adWaiting) {
+        console.log('⏳ Already waiting...');
+        return;
+    }
+    if (state.currentAdIndex >= state.adsList.length) {
+        console.log('📭 No more ads...');
+        return;
+    }
     
     state.isProcessing = true;
     state.adWaiting = true;
@@ -213,29 +259,39 @@ function handleAdClick() {
     const numberEl = document.getElementById('countdownNumber');
     const ad = state.adsList[state.currentAdIndex];
     
-    // Buka iklan
+    console.log('📤 Opening ad:', ad.title, ad.url);
+    
+    // Buka iklan di tab baru
     window.open(ad.url, '_blank');
     
     // Disable button
-    btn.disabled = true;
-    btn.innerHTML = '<span class="btn-text">⏳ Waiting...</span>';
-    countdownEl.style.display = 'flex';
-    statusEl.className = 'ad-status';
-    statusEl.innerHTML = `
-        <span class="status-icon">⏳</span>
-        <span class="status-text">Please wait 3 seconds...</span>
-    `;
+    if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = '<span class="btn-text">⏳ Waiting...</span>';
+    }
+    
+    if (countdownEl) countdownEl.style.display = 'flex';
+    
+    if (statusEl) {
+        statusEl.className = 'ad-status';
+        statusEl.innerHTML = `
+            <span class="status-icon">⏳</span>
+            <span class="status-text">Please wait 3 seconds...</span>
+        `;
+    }
     
     // Countdown 3 detik
     let countdown = 3;
-    numberEl.textContent = countdown;
+    if (numberEl) numberEl.textContent = countdown;
     
     const interval = setInterval(() => {
         countdown--;
-        numberEl.textContent = countdown;
+        if (numberEl) numberEl.textContent = countdown;
         
         if (countdown <= 0) {
             clearInterval(interval);
+            
+            console.log('✅ Ad completed!');
             
             // Selesai 1 iklan
             state.adCompleted = true;
@@ -243,23 +299,28 @@ function handleAdClick() {
             state.isProcessing = false;
             state.adsCompleted++;
             
-            btn.innerHTML = '<span class="btn-text">✅ Done!</span>';
-            btn.className = 'btn-ad done';
-            countdownEl.style.display = 'none';
-            statusEl.className = 'ad-status success';
-            statusEl.innerHTML = `
-                <span class="status-icon">✅</span>
-                <span class="status-text">Ad ${state.adsCompleted} of ${state.adsList.length} completed!</span>
-            `;
+            if (btn) {
+                btn.innerHTML = '<span class="btn-text">✅ Done!</span>';
+                btn.className = 'btn-ad done';
+            }
             
-            // Update progress
+            if (countdownEl) countdownEl.style.display = 'none';
+            
+            if (statusEl) {
+                statusEl.className = 'ad-status success';
+                statusEl.innerHTML = `
+                    <span class="status-icon">✅</span>
+                    <span class="status-text">Ad ${state.adsCompleted} of ${state.adsList.length} completed!</span>
+                `;
+            }
+            
             updateUI();
             
             // Lanjut ke iklan berikutnya setelah delay
             setTimeout(() => {
                 state.currentAdIndex++;
                 showAd(state.currentAdIndex);
-            }, 1000);
+            }, 800);
         }
     }, 1000);
 }
@@ -271,16 +332,20 @@ function updateUI() {
     const current = state.currentStep;
     const progress = (completed / total) * 100;
     
-    // Update progress bar
-    document.getElementById('progressBar').style.width = Math.min(progress, 100) + '%';
+    const progressBar = document.getElementById('progressBar');
+    if (progressBar) {
+        progressBar.style.width = Math.min(progress, 100) + '%';
+    }
     
-    // Update step title
+    const stepTitle = document.getElementById('stepTitle');
+    const stepDesc = document.getElementById('stepDesc');
+    
     if (completed >= total) {
-        document.getElementById('stepTitle').textContent = '✅ ALL STEPS COMPLETED';
-        document.getElementById('stepDesc').textContent = 'Getting your key...';
+        if (stepTitle) stepTitle.textContent = '✅ ALL STEPS COMPLETED';
+        if (stepDesc) stepDesc.textContent = 'Getting your key...';
     } else {
-        document.getElementById('stepTitle').textContent = `STEP ${current} OF ${total}`;
-        document.getElementById('stepDesc').textContent = `Complete ad ${current} of ${total}`;
+        if (stepTitle) stepTitle.textContent = `STEP ${current} OF ${total}`;
+        if (stepDesc) stepDesc.textContent = `Complete ad ${current} of ${total}`;
     }
     
     // Update step circles
@@ -288,14 +353,19 @@ function updateUI() {
         const circle = document.getElementById(`stepCircle${i}`);
         const line = document.getElementById(`stepLine${i}`);
         
-        circle.classList.remove('active', 'completed');
-        if (line) line.classList.remove('completed');
-        
-        if (i < completed + 1) {
-            circle.classList.add('completed');
-            if (line) line.classList.add('completed');
-        } else if (i === completed + 1) {
-            circle.classList.add('active');
+        if (circle) {
+            circle.classList.remove('active', 'completed');
+            if (i < completed + 1) {
+                circle.classList.add('completed');
+            } else if (i === completed + 1) {
+                circle.classList.add('active');
+            }
+        }
+        if (line) {
+            line.classList.remove('completed');
+            if (i <= completed) {
+                line.classList.add('completed');
+            }
         }
     }
 }
@@ -306,12 +376,13 @@ async function getLicence() {
     const licenceSection = document.getElementById('licenceSection');
     const loadingSection = document.getElementById('loadingSection');
     
-    // Hide ads, show loading
-    adsSection.style.display = 'none';
-    loadingSection.style.display = 'block';
+    if (adsSection) adsSection.style.display = 'none';
+    if (loadingSection) loadingSection.style.display = 'block';
     
-    document.getElementById('stepTitle').textContent = '⏳ GETTING YOUR KEY';
-    document.getElementById('stepDesc').textContent = 'Please wait...';
+    const stepTitle = document.getElementById('stepTitle');
+    const stepDesc = document.getElementById('stepDesc');
+    if (stepTitle) stepTitle.textContent = '⏳ GETTING YOUR KEY';
+    if (stepDesc) stepDesc.textContent = 'Please wait...';
     
     try {
         const response = await fetch(GITHUB_RAW_URL, { 
@@ -327,7 +398,6 @@ async function getLicence() {
             throw new Error('Data licences kosong');
         }
         
-        // Cari licence available
         let availableKey = null;
         let availableData = null;
         
@@ -349,42 +419,45 @@ async function getLicence() {
         
         state.licenceKey = availableKey;
         
-        // Tampilkan licence
-        loadingSection.style.display = 'none';
-        licenceSection.style.display = 'block';
+        if (loadingSection) loadingSection.style.display = 'none';
+        if (licenceSection) licenceSection.style.display = 'block';
         
-        document.getElementById('licenceKey').textContent = availableKey;
+        const keyEl = document.getElementById('licenceKey');
+        if (keyEl) keyEl.textContent = availableKey;
         
         const expiredDate = new Date(availableData.expired_date);
         const now = new Date();
         const hoursLeft = Math.floor((expiredDate - now) / (1000 * 60 * 60));
         
-        document.getElementById('expiredDate').textContent = `${hoursLeft} hours`;
+        const expiredEl = document.getElementById('expiredDate');
+        if (expiredEl) expiredEl.textContent = `${hoursLeft} hours`;
         
+        const typeEl = document.getElementById('licenceType');
         const isVIP = availableData.is_vip === true;
-        document.getElementById('licenceType').textContent = isVIP ? '👑 VIP' : '📦 FREE';
-        if (isVIP) {
-            document.getElementById('licenceType').className = 'value vip';
+        if (typeEl) {
+            typeEl.textContent = isVIP ? '👑 VIP' : '📦 FREE';
+            if (isVIP) typeEl.className = 'value vip';
         }
         
-        document.getElementById('stepTitle').textContent = '🎉 KEY UNLOCKED!';
-        document.getElementById('stepDesc').textContent = 'Copy your key below';
+        if (stepTitle) stepTitle.textContent = '🎉 KEY UNLOCKED!';
+        if (stepDesc) stepDesc.textContent = 'Copy your key below';
         
-        // Update user counter
         await updateUserCounter();
-        
-        // Confetti
         createConfetti();
         
     } catch (error) {
         console.error('❌ Error:', error);
-        loadingSection.style.display = 'none';
-        adsSection.style.display = 'block';
-        document.getElementById('adStatus').className = 'ad-status error';
-        document.getElementById('adStatus').innerHTML = `
-            <span class="status-icon">❌</span>
-            <span class="status-text">${error.message}. Please refresh and try again.</span>
-        `;
+        if (loadingSection) loadingSection.style.display = 'none';
+        if (adsSection) adsSection.style.display = 'block';
+        
+        const statusEl = document.getElementById('adStatus');
+        if (statusEl) {
+            statusEl.className = 'ad-status error';
+            statusEl.innerHTML = `
+                <span class="status-icon">❌</span>
+                <span class="status-text">${error.message}. Please refresh and try again.</span>
+            `;
+        }
         
         // Reset
         state.adsCompleted = 0;
@@ -400,17 +473,21 @@ async function getLicence() {
 
 // ============ COPY LICENCE ============
 function copyLicence() {
-    const key = document.getElementById('licenceKey').textContent;
+    const keyEl = document.getElementById('licenceKey');
+    if (!keyEl) return;
+    
+    const key = keyEl.textContent;
     navigator.clipboard.writeText(key).then(() => {
         const btn = document.querySelector('.btn-copy');
-        const originalText = btn.innerHTML;
-        btn.innerHTML = '✅ COPIED!';
-        btn.style.borderColor = '#00ff88';
-        
-        setTimeout(() => {
-            btn.innerHTML = originalText;
-            btn.style.borderColor = '';
-        }, 2000);
+        if (btn) {
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '✅ COPIED!';
+            btn.style.borderColor = '#00ff88';
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                btn.style.borderColor = '';
+            }, 2000);
+        }
     }).catch(() => {
         const textarea = document.createElement('textarea');
         textarea.value = key;
@@ -443,7 +520,6 @@ function createConfetti() {
             animation: confettiFall ${2 + Math.random() * 3}s linear forwards;
         `;
         document.body.appendChild(confetti);
-        
         setTimeout(() => confetti.remove(), 5000);
     }
 }
@@ -464,7 +540,7 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
-// ============ AUTO REFRESH COUNTER ============
+// ============ AUTO REFRESH ============
 setInterval(updateUserCounter, 30000);
 
 // ============ EXPOSE GLOBAL ============
