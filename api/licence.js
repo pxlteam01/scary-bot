@@ -6,7 +6,7 @@ const axios = require('axios');
 
 const GITHUB_USERNAME = process.env.GITHUB_USERNAME || 'pxlteam01';
 const GITHUB_REPO = process.env.GITHUB_REPO || 'licence';
-const GITHUB_TOKEN = process.env.GITHUB_TOKEN || 'YOUR_TOKEN';
+const GITHUB_TOKEN = process.env.GITHUB_TOKEN || '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';
 
 const GITHUB_API_URL = `https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/stats.json`;
 
