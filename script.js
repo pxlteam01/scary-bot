@@ -4,9 +4,9 @@
 // ========================================
 
 // ============ CONFIG ============
-const GITHUB_RAW_URL = 'https://raw.githubusercontent.com/YOUR_USERNAME/scary-bot-licences/main/licenses.json';
-const GITHUB_STATUS_URL = 'https://raw.githubusercontent.com/YOUR_USERNAME/scary-bot-licences/main/website_status.json';
-const GITHUB_STATS_URL = 'https://raw.githubusercontent.com/YOUR_USERNAME/scary-bot-licences/main/stats.json';
+const GITHUB_RAW_URL = 'https://raw.githubusercontent.com/pxlteam01/licence/main/license.json';
+const GITHUB_STATUS_URL = 'https://raw.githubusercontent.com/pxlteam01/licence/main/website_status.json';
+const GITHUB_STATS_URL = 'https://raw.githubusercontent.com/pxlteam01/licence/main/stats.json';
 
 // ============ DAFTAR IKLAN URL REAL ============
 const ADS_URLS = [
