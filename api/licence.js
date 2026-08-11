@@ -1,17 +1,16 @@
 // ========================================
-// SCARY BOT API - LICENCE HANDLER
+// SCARY BOT API - UPDATE STATS
 // ========================================
 
 const axios = require('axios');
 
 const GITHUB_USERNAME = process.env.GITHUB_USERNAME || 'pxlteam01';
 const GITHUB_REPO = process.env.GITHUB_REPO || 'licence';
-const GITHUB_TOKEN = process.env.GITHUB_TOKEN || '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';
+const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 
-const GITHUB_API_URL = `https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/stats.json`;
+const GITHUB_STATS_URL = `https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/stats.json`;
 
 module.exports = async (req, res) => {
-    // CORS
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -25,22 +24,34 @@ module.exports = async (req, res) => {
             const stats = req.body;
             
             // Get current file SHA
-            const getResponse = await axios.get(GITHUB_API_URL, {
-                headers: {
-                    'Authorization': `token ${GITHUB_TOKEN}`,
-                    'Accept': 'application/vnd.github.v3+json'
+            let sha = null;
+            try {
+                const getResponse = await axios.get(GITHUB_STATS_URL, {
+                    headers: {
+                        'Authorization': `token ${GITHUB_TOKEN}`,
+                        'Accept': 'application/vnd.github.v3+json'
+                    }
+                });
+                if (getResponse.data && getResponse.data.sha) {
+                    sha = getResponse.data.sha;
                 }
-            });
+            } catch (e) {
+                // File belum ada
+            }
             
-            const sha = getResponse.data.sha;
             const encoded = Buffer.from(JSON.stringify(stats, null, 2)).toString('base64');
             
-            await axios.put(GITHUB_API_URL, {
+            const payload = {
                 message: 'Update stats from website',
                 content: encoded,
-                sha: sha,
                 branch: 'main'
-            }, {
+            };
+            
+            if (sha) {
+                payload.sha = sha;
+            }
+            
+            await axios.put(GITHUB_STATS_URL, payload, {
                 headers: {
                     'Authorization': `token ${GITHUB_TOKEN}`,
                     'Accept': 'application/vnd.github.v3+json'
