@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scary Bot - Free Licence</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- ============ BACKGROUND ANIMATION ============ -->
+    <div class="bg-animation">
+        <div class="glow-1"></div>
+        <div class="glow-2"></div>
+        <div class="glow-3"></div>
+        <div class="particles" id="particles"></div>
+    </div>
+
+    <!-- ============ MAIN CONTAINER ============ -->
+    <div class="container" id="app">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">
+                <span class="icon">👻</span>
+                <h1>SCARY BOT</h1>
+            </div>
+            <div class="status-badge" id="statusBadge">
+                <span class="dot online"></span>
+                ONLINE
+            </div>
+        </div>
+
+        <!-- Main Card -->
+        <div class="card" id="mainCard">
+            <!-- Status Website -->
+            <div class="website-status" id="websiteStatus">
+                <div class="status-content">
+                    <span class="status-icon">🔴</span>
+                    <span class="status-text">WEBSITE TELAH DI TUTUP</span>
+                    <span class="status-sub">NOTE DEVELOPER SEDANG MENAMBAHKAN LICENCE KEY YANG BARU, HARAP DI TUNGGU DAN REFRESH WEBSITE UNTUK MEMUAT ULANG!</span>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="content" id="mainContent">
+                <!-- Title -->
+                <div class="title-section">
+                    <h2 class="glitch-text" data-text="FREE LICENCE">🎯 FREE LICENCE</h2>
+                    <p class="subtitle">Dapatkan licence key gratis untuk Scary Bot V1</p>
+                    <div class="divider"></div>
+                </div>
+
+                <!-- Iklan Section -->
+                <div class="ads-section" id="adsSection">
+                    <div class="ads-header">
+                        <span class="ads-icon">📢</span>
+                        <span class="ads-title">Selesaikan 5 Iklan untuk Unlock Licence</span>
+                        <span class="ads-progress" id="adsProgress">0/5</span>
+                    </div>
+                    
+                    <div class="ads-grid" id="adsGrid">
+                        <!-- Ads akan di generate oleh JS -->
+                    </div>
+
+                    <div class="ads-info">
+                        <span>💡 Klik iklan, tunggu 3 detik, lalu klik "Selesai"</span>
+                    </div>
+                </div>
+
+                <!-- Licence Section -->
+                <div class="licence-section" id="licenceSection" style="display: none;">
+                    <div class="licence-header">
+                        <span class="lock-icon">🔓</span>
+                        <span class="licence-title">LICENCE KEY</span>
+                    </div>
+                    
+                    <div class="licence-box" id="licenceBox">
+                        <div class="licence-key" id="licenceKey">SCARY-ABCD-EFGH-IJKL</div>
+                        <button class="btn-copy" onclick="copyLicence()">
+                            📋 Copy
+                        </button>
+                    </div>
+
+                    <div class="licence-info">
+                        <div class="info-item">
+                            <span class="label">⏰ Expired</span>
+                            <span class="value" id="expiredDate">24 Jam</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">📦 Type</span>
+                            <span class="value" id="licenceType">FREE</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">👤 Device</span>
+                            <span class="value">1 Device</span>
+                        </div>
+                    </div>
+
+                    <div class="licence-actions">
+                        <button class="btn-primary" onclick="window.open('https://t.me/your_bot', '_blank')">
+                            💬 Beli Licence VIP
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Loading -->
+                <div class="loading-section" id="loadingSection" style="display: none;">
+                    <div class="loader"></div>
+                    <span class="loading-text">Mendapatkan licence...</span>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="footer">
+                <div class="footer-links">
+                    <a href="#" onclick="window.open('https://t.me/your_bot', '_blank')">Telegram</a>
+                    <a href="#" onclick="window.open('https://github.com/your_username', '_blank')">GitHub</a>
+                    <a href="#" onclick="window.open('https://youtube.com', '_blank')">YouTube</a>
+                </div>
+                <div class="footer-copy">
+                    <span>© 2024 Scary Bot - By Tuan Kepala CPY</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============ SCRIPTS ============ -->
+    <script src="script.js"></script>
+</body>
+</html>
