@@ -1,155 +1,39 @@
 // ========================================
-// SCARY BOT WEBSITE - SCRIPT (URL REAL ADS)
+// SCARY BOT WEBSITE - SCRIPT (FIXED)
 // BY TUAN KEPALA CPY
 // ========================================
 
 // ============ CONFIG ============
-const GITHUB_RAW_URL = 'https://raw.githubusercontent.com/pxlteam01/licence/main/license.json';
-const GITHUB_STATUS_URL = 'https://raw.githubusercontent.com/pxlteam01/licence/main/website_status.json';
-const GITHUB_STATS_URL = 'https://raw.githubusercontent.com/pxlteam01/licence/main/stats.json';
+// GANTI DENGAN USERNAME DAN REPO LU!
+const GITHUB_USERNAME = 'pxlteam01';
+const GITHUB_REPO = 'licence';
+
+const GITHUB_RAW_URL = `https://raw.githubusercontent.com/${GITHUB_USERNAME}/${GITHUB_REPO}/main/licenses.json`;
+const GITHUB_STATUS_URL = `https://raw.githubusercontent.com/${GITHUB_USERNAME}/${GITHUB_REPO}/main/website_status.json`;
+const GITHUB_STATS_URL = `https://raw.githubusercontent.com/${GITHUB_USERNAME}/${GITHUB_REPO}/main/stats.json`;
 
 // ============ DAFTAR IKLAN URL REAL ============
 const ADS_URLS = [
-    {
-        id: 1,
-        icon: '🛒',
-        title: 'Shopee',
-        sub: 'Belanja Online',
-        url: 'https://shopee.co.id'
-    },
-    {
-        id: 2,
-        icon: '📦',
-        title: 'Tokopedia',
-        sub: 'Marketplace',
-        url: 'https://tokopedia.com'
-    },
-    {
-        id: 3,
-        icon: '🛍️',
-        title: 'Lazada',
-        sub: 'E-commerce',
-        url: 'https://lazada.co.id'
-    },
-    {
-        id: 4,
-        icon: '📱',
-        title: 'Blibli',
-        sub: 'Belanja Online',
-        url: 'https://blibli.com'
-    },
-    {
-        id: 5,
-        icon: '🏪',
-        title: 'Bukalapak',
-        sub: 'Marketplace',
-        url: 'https://bukalapak.com'
-    },
-    {
-        id: 6,
-        icon: '📺',
-        title: 'YouTube',
-        sub: 'Video Streaming',
-        url: 'https://youtube.com'
-    },
-    {
-        id: 7,
-        icon: '📘',
-        title: 'Facebook',
-        sub: 'Social Media',
-        url: 'https://facebook.com'
-    },
-    {
-        id: 8,
-        icon: '📷',
-        title: 'Instagram',
-        sub: 'Social Media',
-        url: 'https://instagram.com'
-    },
-    {
-        id: 9,
-        icon: '🐦',
-        title: 'Twitter/X',
-        sub: 'Social Media',
-        url: 'https://twitter.com'
-    },
-    {
-        id: 10,
-        icon: '💬',
-        title: 'Telegram',
-        sub: 'Messenger',
-        url: 'https://t.me'
-    },
-    {
-        id: 11,
-        icon: '🎮',
-        title: 'Free Fire',
-        sub: 'Game Online',
-        url: 'https://ff.garena.com'
-    },
-    {
-        id: 12,
-        icon: '🍕',
-        title: 'GoFood',
-        sub: 'Food Delivery',
-        url: 'https://gofood.co.id'
-    },
-    {
-        id: 13,
-        icon: '🚗',
-        title: 'GoCar',
-        sub: 'Transportasi',
-        url: 'https://gocar.co.id'
-    },
-    {
-        id: 14,
-        icon: '🏨',
-        title: 'Traveloka',
-        sub: 'Travel & Hotel',
-        url: 'https://traveloka.com'
-    },
-    {
-        id: 15,
-        icon: '💰',
-        title: 'DANA',
-        sub: 'E-Wallet',
-        url: 'https://dana.id'
-    },
-    {
-        id: 16,
-        icon: '💳',
-        title: 'OVO',
-        sub: 'E-Wallet',
-        url: 'https://ovo.id'
-    },
-    {
-        id: 17,
-        icon: '🎬',
-        title: 'Netflix',
-        sub: 'Streaming',
-        url: 'https://netflix.com'
-    },
-    {
-        id: 18,
-        icon: '🎵',
-        title: 'Spotify',
-        sub: 'Music Streaming',
-        url: 'https://spotify.com'
-    },
-    {
-        id: 19,
-        icon: '📚',
-        title: 'Google',
-        sub: 'Search Engine',
-        url: 'https://google.com'
-    },
-    {
-        id: 20,
-        icon: '💎',
-        title: 'Crypto.com',
-        sub: 'Cryptocurrency',
-        url: 'https://crypto.com'
-    }
+    { id: 1, icon: '🛒', title: 'Shopee', sub: 'Belanja Online', url: 'https://shopee.co.id' },
+    { id: 2, icon: '📦', title: 'Tokopedia', sub: 'Marketplace', url: 'https://tokopedia.com' },
+    { id: 3, icon: '🛍️', title: 'Lazada', sub: 'E-commerce', url: 'https://lazada.co.id' },
+    { id: 4, icon: '📱', title: 'Blibli', sub: 'Belanja Online', url: 'https://blibli.com' },
+    { id: 5, icon: '🏪', title: 'Bukalapak', sub: 'Marketplace', url: 'https://bukalapak.com' },
+    { id: 6, icon: '📺', title: 'YouTube', sub: 'Video Streaming', url: 'https://youtube.com' },
+    { id: 7, icon: '📘', title: 'Facebook', sub: 'Social Media', url: 'https://facebook.com' },
+    { id: 8, icon: '📷', title: 'Instagram', sub: 'Social Media', url: 'https://instagram.com' },
+    { id: 9, icon: '🐦', title: 'Twitter/X', sub: 'Social Media', url: 'https://twitter.com' },
+    { id: 10, icon: '💬', title: 'Telegram', sub: 'Messenger', url: 'https://t.me' },
+    { id: 11, icon: '🎮', title: 'Free Fire', sub: 'Game Online', url: 'https://ff.garena.com' },
+    { id: 12, icon: '🍕', title: 'GoFood', sub: 'Food Delivery', url: 'https://gofood.co.id' },
+    { id: 13, icon: '🚗', title: 'GoCar', sub: 'Transportasi', url: 'https://gocar.co.id' },
+    { id: 14, icon: '🏨', title: 'Traveloka', sub: 'Travel & Hotel', url: 'https://traveloka.com' },
+    { id: 15, icon: '💰', title: 'DANA', sub: 'E-Wallet', url: 'https://dana.id' },
+    { id: 16, icon: '💳', title: 'OVO', sub: 'E-Wallet', url: 'https://ovo.id' },
+    { id: 17, icon: '🎬', title: 'Netflix', sub: 'Streaming', url: 'https://netflix.com' },
+    { id: 18, icon: '🎵', title: 'Spotify', sub: 'Music Streaming', url: 'https://spotify.com' },
+    { id: 19, icon: '📚', title: 'Google', sub: 'Search Engine', url: 'https://google.com' },
+    { id: 20, icon: '💎', title: 'Crypto.com', sub: 'Cryptocurrency', url: 'https://crypto.com' }
 ];
 
 // ============ STATE ============
@@ -209,7 +93,6 @@ function initParticles() {
 
 // ============ ADS ============
 function initAds() {
-    // Shuffle dan ambil 5-8 iklan random
     const shuffled = [...ADS_URLS].sort(() => Math.random() - 0.5);
     const selected = shuffled.slice(0, 5 + Math.floor(Math.random() * 4));
     
@@ -268,13 +151,9 @@ function handleAdClick(index) {
     ad.clicked = true;
     ad.countdown = 3;
     
-    // BUKA LINK IKLAN ASLI DI TAB BARU
     window.open(ad.url, '_blank');
-    
-    // Update UI
     renderAds();
     
-    // Countdown 3 detik (simulasi baca iklan)
     const countdownEl = document.getElementById(`countdown-${index}`);
     let countdown = 3;
     
@@ -284,8 +163,6 @@ function handleAdClick(index) {
         
         if (countdown <= 0) {
             clearInterval(interval);
-            
-            // Tandai selesai
             ad.completed = true;
             ad.waiting = false;
             state.adsCompleted++;
@@ -294,7 +171,6 @@ function handleAdClick(index) {
             renderAds();
             updateProgress();
             
-            // Cek apakah semua iklan selesai
             if (state.adsCompleted >= state.adsTotal) {
                 getLicence();
             }
@@ -306,52 +182,89 @@ function updateProgress() {
     const progressEl = document.getElementById('adsProgress');
     progressEl.textContent = `${state.adsCompleted}/${state.adsTotal}`;
     
-    // Update progress bar visual
-    const progressBar = document.querySelector('.ads-progress-bar');
+    const progressBar = document.getElementById('adsProgressBar');
     if (progressBar) {
         const percent = (state.adsCompleted / state.adsTotal) * 100;
         progressBar.style.width = percent + '%';
     }
 }
 
-// ============ GET LICENCE ============
+// ============ GET LICENCE - FIXED! ============
 async function getLicence() {
     const loadingSection = document.getElementById('loadingSection');
     const adsSection = document.getElementById('adsSection');
     const licenceSection = document.getElementById('licenceSection');
     
-    // Show loading
     adsSection.style.display = 'none';
     loadingSection.style.display = 'block';
     
     try {
-        // Get all licences from GitHub
-        const response = await fetch(GITHUB_RAW_URL, { cache: 'no-store' });
-        if (!response.ok) throw new Error('Gagal ambil data');
+        console.log('📡 Fetching licences from:', GITHUB_RAW_URL);
+        
+        // Ambil data dari GitHub dengan fetch
+        const response = await fetch(GITHUB_RAW_URL, { 
+            cache: 'no-store',
+            headers: {
+                'Accept': 'application/json'
+            }
+        });
+        
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
         
         const licences = await response.json();
+        console.log('📦 Data received:', licences);
         
-        // Cari licence yang belum digunakan
+        // Cek apakah licences adalah object dan punya isi
+        if (!licences || typeof licences !== 'object') {
+            throw new Error('Data licences kosong atau format salah');
+        }
+        
+        const keys = Object.keys(licences);
+        console.log('🔑 Available keys:', keys.length);
+        
+        if (keys.length === 0) {
+            throw new Error('Tidak ada licence tersedia di GitHub!');
+        }
+        
+        // Cari licence yang belum digunakan dan belum expired
         let availableKey = null;
         let availableData = null;
+        let expiredCount = 0;
+        let usedCount = 0;
         
         for (const [key, data] of Object.entries(licences)) {
-            if (!data.used) {
-                const expiredDate = new Date(data.expired_date);
-                if (new Date() < expiredDate) {
-                    availableKey = key;
-                    availableData = data;
-                    break;
-                }
+            // Cek expired
+            const expiredDate = new Date(data.expired_date);
+            const now = new Date();
+            
+            if (now > expiredDate) {
+                expiredCount++;
+                continue;
             }
+            
+            // Cek used
+            if (data.used === true) {
+                usedCount++;
+                continue;
+            }
+            
+            // Licence available!
+            availableKey = key;
+            availableData = data;
+            break;
         }
+        
+        console.log(`📊 Stats: ${keys.length} total, ${expiredCount} expired, ${usedCount} used, ${availableKey ? 1 : 0} available`);
         
         if (!availableKey) {
-            throw new Error('Tidak ada licence tersedia');
+            let msg = 'Tidak ada licence tersedia! ';
+            if (expiredCount > 0) msg += `${expiredCount} licence expired, `;
+            if (usedCount > 0) msg += `${usedCount} licence sudah dipakai. `;
+            msg += 'Silakan hubungi admin untuk licence baru.';
+            throw new Error(msg);
         }
-        
-        // Update stats (user count)
-        await updateStats();
         
         // Tampilkan licence
         state.licenceKey = availableKey;
@@ -365,25 +278,57 @@ async function getLicence() {
         const expiredDate = new Date(availableData.expired_date);
         const now = new Date();
         const hoursLeft = Math.floor((expiredDate - now) / (1000 * 60 * 60));
-        document.getElementById('expiredDate').textContent = `${hoursLeft} jam lagi (${expiredDate.toLocaleDateString('id-ID')})`;
+        const daysLeft = Math.floor(hoursLeft / 24);
+        
+        let timeLeft = '';
+        if (daysLeft > 0) {
+            timeLeft = `${daysLeft} hari ${hoursLeft % 24} jam lagi`;
+        } else if (hoursLeft > 0) {
+            timeLeft = `${hoursLeft} jam lagi`;
+        } else {
+            timeLeft = 'Segera expired!';
+        }
+        
+        document.getElementById('expiredDate').textContent = `${timeLeft} (${expiredDate.toLocaleDateString('id-ID')} ${expiredDate.toLocaleTimeString('id-ID')})`;
         
         // Type
-        document.getElementById('licenceType').textContent = availableData.is_vip ? '👑 VIP' : '📦 FREE';
-        if (availableData.is_vip) {
+        const isVIP = availableData.is_vip === true;
+        document.getElementById('licenceType').textContent = isVIP ? '👑 VIP' : '📦 FREE';
+        if (isVIP) {
             document.getElementById('licenceType').className = 'value vip';
         }
         
-        // Success confetti effect
-        createConfetti();
+        // Update stats (increment user count via API)
+        try {
+            await fetch('/api/update-stats', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    action: 'increment_user'
+                })
+            });
+        } catch (e) {
+            console.log('⚠️ Gagal update stats:', e);
+        }
         
-        // Update progress bar ke 100%
-        updateProgress();
+        createConfetti();
         
     } catch (error) {
         console.error('❌ Error:', error);
         loadingSection.style.display = 'none';
         adsSection.style.display = 'block';
-        alert('❌ Gagal mendapatkan licence! Silakan refresh dan coba lagi.\n\n' + error.message);
+        
+        // Tampilkan error lebih detail
+        let errorMsg = '❌ Gagal mendapatkan licence!\n\n';
+        errorMsg += `📌 Error: ${error.message}\n\n`;
+        errorMsg += '📌 Solusi:\n';
+        errorMsg += '1. Pastikan repo "licence" ada dan public\n';
+        errorMsg += '2. Pastikan file licences.json ada di repo\n';
+        errorMsg += '3. Pastikan ada licence yang tersedia (belum digunakan)\n';
+        errorMsg += '4. Refresh website dan coba lagi\n\n';
+        errorMsg += '📌 Hubungi admin jika masalah berlanjut: @tuan_cpy';
+        
+        alert(errorMsg);
         
         // Reset ads
         state.adsCompleted = 0;
@@ -395,27 +340,6 @@ async function getLicence() {
         });
         renderAds();
         updateProgress();
-    }
-}
-
-// ============ UPDATE STATS ============
-async function updateStats() {
-    try {
-        const response = await fetch(GITHUB_STATS_URL, { cache: 'no-store' });
-        if (response.ok) {
-            const stats = await response.json();
-            stats.total_users = (stats.total_users || 0) + 1;
-            stats.last_update = new Date().toISOString();
-            
-            // Update ke GitHub (via API)
-            await fetch('/api/update-stats', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(stats)
-            });
-        }
-    } catch (error) {
-        console.log('⚠️ Gagal update stats:', error);
     }
 }
 
@@ -433,7 +357,6 @@ function copyLicence() {
             btn.style.borderColor = '';
         }, 2000);
     }).catch(() => {
-        // Fallback
         const textarea = document.createElement('textarea');
         textarea.value = key;
         document.body.appendChild(textarea);
