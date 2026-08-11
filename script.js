@@ -1,58 +1,95 @@
 // ========================================
-// SCARY BOT WEBSITE - SCRIPT (FIXED)
+// SCARY BOT WEBSITE - SCRIPT (PARTIKEL UNGU + COUNTER)
 // BY TUAN KEPALA CPY
 // ========================================
 
 // ============ CONFIG ============
-// GANTI DENGAN USERNAME DAN REPO LU!
 const GITHUB_USERNAME = 'pxlteam01';
 const GITHUB_REPO = 'licence';
 
-const GITHUB_RAW_URL = `https://raw.githubusercontent.com/${GITHUB_USERNAME}/${GITHUB_REPO}/main/licenses.json`;
+const GITHUB_RAW_URL = `https://raw.githubusercontent.com/${GITHUB_USERNAME}/${GITHUB_REPO}/main/licence.json`;
 const GITHUB_STATUS_URL = `https://raw.githubusercontent.com/${GITHUB_USERNAME}/${GITHUB_REPO}/main/website_status.json`;
 const GITHUB_STATS_URL = `https://raw.githubusercontent.com/${GITHUB_USERNAME}/${GITHUB_REPO}/main/stats.json`;
 
-// ============ DAFTAR IKLAN URL REAL ============
-const ADS_URLS = [
-    { id: 1, icon: '🛒', title: 'Shopee', sub: 'Belanja Online', url: 'https://shopee.co.id' },
-    { id: 2, icon: '📦', title: 'Tokopedia', sub: 'Marketplace', url: 'https://tokopedia.com' },
-    { id: 3, icon: '🛍️', title: 'Lazada', sub: 'E-commerce', url: 'https://lazada.co.id' },
-    { id: 4, icon: '📱', title: 'Blibli', sub: 'Belanja Online', url: 'https://blibli.com' },
-    { id: 5, icon: '🏪', title: 'Bukalapak', sub: 'Marketplace', url: 'https://bukalapak.com' },
-    { id: 6, icon: '📺', title: 'YouTube', sub: 'Video Streaming', url: 'https://youtube.com' },
-    { id: 7, icon: '📘', title: 'Facebook', sub: 'Social Media', url: 'https://facebook.com' },
-    { id: 8, icon: '📷', title: 'Instagram', sub: 'Social Media', url: 'https://instagram.com' },
-    { id: 9, icon: '🐦', title: 'Twitter/X', sub: 'Social Media', url: 'https://twitter.com' },
-    { id: 10, icon: '💬', title: 'Telegram', sub: 'Messenger', url: 'https://t.me' },
-    { id: 11, icon: '🎮', title: 'Free Fire', sub: 'Game Online', url: 'https://ff.garena.com' },
-    { id: 12, icon: '🍕', title: 'GoFood', sub: 'Food Delivery', url: 'https://gofood.co.id' },
-    { id: 13, icon: '🚗', title: 'GoCar', sub: 'Transportasi', url: 'https://gocar.co.id' },
-    { id: 14, icon: '🏨', title: 'Traveloka', sub: 'Travel & Hotel', url: 'https://traveloka.com' },
-    { id: 15, icon: '💰', title: 'DANA', sub: 'E-Wallet', url: 'https://dana.id' },
-    { id: 16, icon: '💳', title: 'OVO', sub: 'E-Wallet', url: 'https://ovo.id' },
-    { id: 17, icon: '🎬', title: 'Netflix', sub: 'Streaming', url: 'https://netflix.com' },
-    { id: 18, icon: '🎵', title: 'Spotify', sub: 'Music Streaming', url: 'https://spotify.com' },
-    { id: 19, icon: '📚', title: 'Google', sub: 'Search Engine', url: 'https://google.com' },
-    { id: 20, icon: '💎', title: 'Crypto.com', sub: 'Cryptocurrency', url: 'https://crypto.com' }
-];
-
 // ============ STATE ============
 let state = {
-    adsCompleted: 0,
-    adsTotal: 5,
-    adsData: [],
+    adCompleted: false,
+    adWaiting: false,
     licenceKey: null,
     isProcessing: false,
     websiteStatus: true,
-    adTimers: {}
+    currentStep: 0,
+    totalUsers: 0
 };
+
+// ============ DAFTAR IKLAN ============
+const ADS_LIST = [
+    { icon: '🛒', title: 'Shopee', sub: 'Belanja Online', url: 'https://shopee.co.id' },
+    { icon: '📦', title: 'Tokopedia', sub: 'Marketplace', url: 'https://tokopedia.com' },
+    { icon: '🛍️', title: 'Lazada', sub: 'E-commerce', url: 'https://lazada.co.id' },
+    { icon: '📱', title: 'Blibli', sub: 'Belanja Online', url: 'https://blibli.com' },
+    { icon: '🏪', title: 'Bukalapak', sub: 'Marketplace', url: 'https://bukalapak.com' },
+    { icon: '📺', title: 'YouTube', sub: 'Video Streaming', url: 'https://youtube.com' },
+    { icon: '📘', title: 'Facebook', sub: 'Social Media', url: 'https://facebook.com' },
+    { icon: '📷', title: 'Instagram', sub: 'Social Media', url: 'https://instagram.com' },
+    { icon: '🎮', title: 'Free Fire', sub: 'Game Online', url: 'https://ff.garena.com' },
+    { icon: '🍕', title: 'GoFood', sub: 'Food Delivery', url: 'https://gofood.co.id' },
+    { icon: '🚗', title: 'GoCar', sub: 'Transportasi', url: 'https://gocar.co.id' },
+    { icon: '🏨', title: 'Traveloka', sub: 'Travel & Hotel', url: 'https://traveloka.com' }
+];
 
 // ============ INIT ============
 document.addEventListener('DOMContentLoaded', async () => {
     await checkWebsiteStatus();
+    await updateUserCounter();
     initParticles();
-    initAds();
+    initAd();
 });
+
+// ============ AMBIL TOTAL PENGGUNA ============
+async function updateUserCounter() {
+    try {
+        const response = await fetch(GITHUB_STATS_URL, { cache: 'no-store' });
+        if (response.ok) {
+            const data = await response.json();
+            state.totalUsers = data.total_users || 0;
+            document.getElementById('totalUsers').textContent = state.totalUsers;
+            document.getElementById('totalUsersCount').textContent = state.totalUsers;
+        }
+    } catch (error) {
+        console.log('⚠️ Gagal ambil stats:', error);
+        document.getElementById('totalUsers').textContent = '...';
+    }
+}
+
+// ============ UPDATE STATS (TAMBAH PENGGUNA) ============
+async function incrementUserCount() {
+    try {
+        // Ambil stats terbaru
+        const response = await fetch(GITHUB_STATS_URL, { cache: 'no-store' });
+        if (!response.ok) throw new Error('Gagal ambil stats');
+        
+        const stats = await response.json();
+        stats.total_users = (stats.total_users || 0) + 1;
+        stats.last_update = new Date().toISOString();
+        
+        // Update ke GitHub via API
+        const updateRes = await fetch('/api/update-stats', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(stats)
+        });
+        
+        if (updateRes.ok) {
+            state.totalUsers = stats.total_users;
+            document.getElementById('totalUsers').textContent = state.totalUsers;
+            document.getElementById('totalUsersCount').textContent = state.totalUsers;
+            console.log('✅ User count updated:', state.totalUsers);
+        }
+    } catch (error) {
+        console.log('⚠️ Gagal update stats:', error);
+    }
+}
 
 // ============ CHECK WEBSITE STATUS ============
 async function checkWebsiteStatus() {
@@ -76,124 +113,233 @@ async function checkWebsiteStatus() {
     }
 }
 
-// ============ PARTICLES ============
+// ============ PARTICLES UNGU ============
 function initParticles() {
-    const container = document.getElementById('particles');
-    for (let i = 0; i < 50; i++) {
-        const particle = document.createElement('div');
-        particle.className = 'particle';
-        particle.style.left = Math.random() * 100 + '%';
-        particle.style.animationDelay = Math.random() * 8 + 's';
-        particle.style.animationDuration = (6 + Math.random() * 6) + 's';
-        particle.style.width = (2 + Math.random() * 4) + 'px';
-        particle.style.height = particle.style.width;
-        container.appendChild(particle);
+    const canvas = document.getElementById('particleCanvas');
+    const ctx = canvas.getContext('2d');
+    let width, height;
+    let particles = [];
+    const particleCount = 80;
+
+    function resize() {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
     }
-}
+    window.addEventListener('resize', resize);
+    resize();
 
-// ============ ADS ============
-function initAds() {
-    const shuffled = [...ADS_URLS].sort(() => Math.random() - 0.5);
-    const selected = shuffled.slice(0, 5 + Math.floor(Math.random() * 4));
-    
-    state.adsData = selected.map((ad) => ({
-        ...ad,
-        completed: false,
-        waiting: false,
-        countdown: 0,
-        clicked: false
-    }));
-    state.adsTotal = state.adsData.length;
-    state.adsCompleted = 0;
-    
-    renderAds();
-    updateProgress();
-}
-
-function renderAds() {
-    const grid = document.getElementById('adsGrid');
-    grid.innerHTML = '';
-    
-    state.adsData.forEach((ad, index) => {
-        const div = document.createElement('div');
-        div.className = 'ads-item' + (ad.completed ? ' completed' : '');
-        div.dataset.index = index;
-        
-        const statusClass = ad.completed ? 'done' : (ad.waiting ? 'waiting' : 'pending');
-        const statusText = ad.completed ? '✅ Selesai' : (ad.waiting ? '⏳ Tunggu...' : '👆 Klik');
-        
-        div.innerHTML = `
-            <span class="ad-icon">${ad.icon}</span>
-            <span class="ad-title">${ad.title}</span>
-            <span class="ad-sub">${ad.sub}</span>
-            ${ad.waiting ? `<span class="countdown" id="countdown-${index}">${ad.countdown || 3}s</span>` : ''}
-            ${ad.completed ? `<span class="check-mark">✅</span>` : ''}
-            <span class="ad-status ${statusClass}">${statusText}</span>
-        `;
-        
-        if (!ad.completed && !ad.waiting) {
-            div.addEventListener('click', () => handleAdClick(index));
+    class Particle {
+        constructor() {
+            this.x = Math.random() * width;
+            this.y = Math.random() * height;
+            this.size = Math.random() * 3 + 1;
+            this.speedX = (Math.random() - 0.5) * 1.5;
+            this.speedY = (Math.random() - 0.5) * 1.5;
+            this.opacity = Math.random() * 0.5 + 0.2;
+            this.color = `rgba(155, 77, 255, ${this.opacity})`;
+            this.pulse = Math.random() * Math.PI * 2;
+            this.pulseSpeed = 0.02 + Math.random() * 0.03;
         }
+
+        update() {
+            this.x += this.speedX;
+            this.y += this.speedY;
+            this.pulse += this.pulseSpeed;
+            
+            const pulseOpacity = 0.2 + Math.sin(this.pulse) * 0.3 + 0.3;
+            this.color = `rgba(155, 77, 255, ${pulseOpacity * 0.7})`;
+
+            if (this.x < 0 || this.x > width) this.speedX *= -1;
+            if (this.y < 0 || this.y > height) this.speedY *= -1;
+        }
+
+        draw() {
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fillStyle = this.color;
+            ctx.fill();
+            
+            // Glow effect
+            const gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.size * 4);
+            gradient.addColorStop(0, `rgba(155, 77, 255, ${0.1 * Math.sin(this.pulse) + 0.1})`);
+            gradient.addColorStop(1, 'rgba(155, 77, 255, 0)');
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size * 4, 0, Math.PI * 2);
+            ctx.fillStyle = gradient;
+            ctx.fill();
+        }
+    }
+
+    // Connect particles dengan garis
+    function drawLines() {
+        for (let i = 0; i < particles.length; i++) {
+            for (let j = i + 1; j < particles.length; j++) {
+                const dx = particles[i].x - particles[j].x;
+                const dy = particles[i].y - particles[j].y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                
+                if (distance < 120) {
+                    const opacity = (1 - distance / 120) * 0.2;
+                    ctx.beginPath();
+                    ctx.moveTo(particles[i].x, particles[i].y);
+                    ctx.lineTo(particles[j].x, particles[j].y);
+                    ctx.strokeStyle = `rgba(155, 77, 255, ${opacity})`;
+                    ctx.lineWidth = 0.5;
+                    ctx.stroke();
+                }
+            }
+        }
+    }
+
+    for (let i = 0; i < particleCount; i++) {
+        particles.push(new Particle());
+    }
+
+    function animate() {
+        ctx.clearRect(0, 0, width, height);
         
-        grid.appendChild(div);
-    });
+        particles.forEach(p => {
+            p.update();
+            p.draw();
+        });
+        
+        drawLines();
+        requestAnimationFrame(animate);
+    }
+
+    animate();
 }
 
-function handleAdClick(index) {
+// ============ INIT ADS ============
+function initAd() {
+    // Pilih iklan random
+    const randomAd = ADS_LIST[Math.floor(Math.random() * ADS_LIST.length)];
+    document.getElementById('adIcon').textContent = randomAd.icon;
+    document.getElementById('adTitle').textContent = randomAd.title;
+    document.getElementById('adSub').textContent = randomAd.sub;
+    
+    // Simpan URL iklan
+    document.getElementById('btnAd').dataset.url = randomAd.url;
+}
+
+// ============ HANDLE AD CLICK ============
+function handleAdClick() {
     if (state.isProcessing) return;
-    if (state.adsData[index].completed) return;
-    if (state.adsData[index].waiting) return;
-    if (state.adsData[index].clicked) return;
+    if (state.adCompleted) return;
+    if (state.adWaiting) return;
     
-    const ad = state.adsData[index];
     state.isProcessing = true;
-    ad.waiting = true;
-    ad.clicked = true;
-    ad.countdown = 3;
+    state.adWaiting = true;
     
-    window.open(ad.url, '_blank');
-    renderAds();
+    const btn = document.getElementById('btnAd');
+    const countdownEl = document.getElementById('adCountdown');
+    const statusEl = document.getElementById('adStatus');
+    const numberEl = document.getElementById('countdownNumber');
     
-    const countdownEl = document.getElementById(`countdown-${index}`);
+    // Update steps
+    updateStep(1);
+    updateProgress(20);
+    
+    // Buka iklan
+    const url = btn.dataset.url;
+    window.open(url, '_blank');
+    
+    // Disable button
+    btn.disabled = true;
+    btn.textContent = '⏳ Tunggu...';
+    countdownEl.style.display = 'block';
+    statusEl.textContent = '⏳ Menunggu konfirmasi...';
+    
+    // Countdown 3 detik
     let countdown = 3;
+    numberEl.textContent = countdown;
     
     const interval = setInterval(() => {
         countdown--;
-        if (countdownEl) countdownEl.textContent = countdown + 's';
+        numberEl.textContent = countdown;
+        
+        // Update progress
+        const progress = 20 + ((3 - countdown) / 3) * 30;
+        updateProgress(progress);
         
         if (countdown <= 0) {
             clearInterval(interval);
-            ad.completed = true;
-            ad.waiting = false;
-            state.adsCompleted++;
+            
+            // Selesai
+            state.adCompleted = true;
+            state.adWaiting = false;
             state.isProcessing = false;
             
-            renderAds();
-            updateProgress();
+            btn.textContent = '✅ Selesai!';
+            btn.className = 'btn-ad done';
+            countdownEl.style.display = 'none';
+            statusEl.textContent = '✅ Iklan selesai! Mengambil licence...';
+            statusEl.className = 'ad-status success';
             
-            if (state.adsCompleted >= state.adsTotal) {
+            updateStep(2);
+            updateProgress(50);
+            
+            // Ambil licence
+            setTimeout(() => {
                 getLicence();
-            }
+            }, 1000);
         }
     }, 1000);
 }
 
-function updateProgress() {
-    const progressEl = document.getElementById('adsProgress');
-    progressEl.textContent = `${state.adsCompleted}/${state.adsTotal}`;
+// ============ UPDATE STEP ============
+function updateStep(step) {
+    state.currentStep = step;
     
-    const progressBar = document.getElementById('adsProgressBar');
-    if (progressBar) {
-        const percent = (state.adsCompleted / state.adsTotal) * 100;
-        progressBar.style.width = percent + '%';
+    for (let i = 1; i <= 5; i++) {
+        const item = document.getElementById(`step${i}`);
+        const status = document.getElementById(`stepStatus${i}`);
+        const line = document.getElementById(`line${i-1}`);
+        
+        item.classList.remove('active', 'completed');
+        
+        if (i < step) {
+            item.classList.add('completed');
+            status.textContent = '✅';
+            if (line) line.className = 'step-line completed';
+        } else if (i === step) {
+            item.classList.add('active');
+            status.textContent = '🔄';
+        } else {
+            status.textContent = '⏳';
+            if (line) line.className = 'step-line';
+        }
     }
 }
 
-// ============ GET LICENCE - FIXED! ============
+// ============ UPDATE PROGRESS ============
+function updateProgress(percent) {
+    const bar = document.getElementById('progressBar');
+    const text = document.getElementById('progressText');
+    
+    bar.style.width = percent + '%';
+    
+    if (percent < 25) {
+        text.textContent = `${Math.round(percent)}% - Klik iklan!`;
+    } else if (percent < 50) {
+        text.textContent = `${Math.round(percent)}% - Menunggu...`;
+    } else if (percent < 75) {
+        text.textContent = `${Math.round(percent)}% - Mengambil licence...`;
+    } else if (percent < 100) {
+        text.textContent = `${Math.round(percent)}% - Hampir selesai!`;
+    } else {
+        text.textContent = `✅ 100% - Selesai!`;
+    }
+}
+
+// ============ GET LICENCE ============
 async function getLicence() {
     const loadingSection = document.getElementById('loadingSection');
     const adsSection = document.getElementById('adsSection');
     const licenceSection = document.getElementById('licenceSection');
+    
+    updateStep(3);
+    updateProgress(60);
     
     adsSection.style.display = 'none';
     loadingSection.style.display = 'block';
@@ -201,12 +347,9 @@ async function getLicence() {
     try {
         console.log('📡 Fetching licences from:', GITHUB_RAW_URL);
         
-        // Ambil data dari GitHub dengan fetch
         const response = await fetch(GITHUB_RAW_URL, { 
             cache: 'no-store',
-            headers: {
-                'Accept': 'application/json'
-            }
+            headers: { 'Accept': 'application/json' }
         });
         
         if (!response.ok) {
@@ -216,7 +359,6 @@ async function getLicence() {
         const licences = await response.json();
         console.log('📦 Data received:', licences);
         
-        // Cek apakah licences adalah object dan punya isi
         if (!licences || typeof licences !== 'object') {
             throw new Error('Data licences kosong atau format salah');
         }
@@ -228,14 +370,12 @@ async function getLicence() {
             throw new Error('Tidak ada licence tersedia di GitHub!');
         }
         
-        // Cari licence yang belum digunakan dan belum expired
         let availableKey = null;
         let availableData = null;
         let expiredCount = 0;
         let usedCount = 0;
         
         for (const [key, data] of Object.entries(licences)) {
-            // Cek expired
             const expiredDate = new Date(data.expired_date);
             const now = new Date();
             
@@ -244,13 +384,11 @@ async function getLicence() {
                 continue;
             }
             
-            // Cek used
             if (data.used === true) {
                 usedCount++;
                 continue;
             }
             
-            // Licence available!
             availableKey = key;
             availableData = data;
             break;
@@ -266,6 +404,9 @@ async function getLicence() {
             throw new Error(msg);
         }
         
+        updateStep(4);
+        updateProgress(80);
+        
         // Tampilkan licence
         state.licenceKey = availableKey;
         
@@ -274,7 +415,6 @@ async function getLicence() {
         
         document.getElementById('licenceKey').textContent = availableKey;
         
-        // Info expired
         const expiredDate = new Date(availableData.expired_date);
         const now = new Date();
         const hoursLeft = Math.floor((expiredDate - now) / (1000 * 60 * 60));
@@ -289,27 +429,19 @@ async function getLicence() {
             timeLeft = 'Segera expired!';
         }
         
-        document.getElementById('expiredDate').textContent = `${timeLeft} (${expiredDate.toLocaleDateString('id-ID')} ${expiredDate.toLocaleTimeString('id-ID')})`;
+        document.getElementById('expiredDate').textContent = `${timeLeft} (${expiredDate.toLocaleDateString('id-ID')})`;
         
-        // Type
         const isVIP = availableData.is_vip === true;
         document.getElementById('licenceType').textContent = isVIP ? '👑 VIP' : '📦 FREE';
         if (isVIP) {
             document.getElementById('licenceType').className = 'value vip';
         }
         
-        // Update stats (increment user count via API)
-        try {
-            await fetch('/api/update-stats', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    action: 'increment_user'
-                })
-            });
-        } catch (e) {
-            console.log('⚠️ Gagal update stats:', e);
-        }
+        updateStep(5);
+        updateProgress(100);
+        
+        // Update user count
+        await incrementUserCount();
         
         createConfetti();
         
@@ -318,28 +450,21 @@ async function getLicence() {
         loadingSection.style.display = 'none';
         adsSection.style.display = 'block';
         
-        // Tampilkan error lebih detail
-        let errorMsg = '❌ Gagal mendapatkan licence!\n\n';
-        errorMsg += `📌 Error: ${error.message}\n\n`;
-        errorMsg += '📌 Solusi:\n';
-        errorMsg += '1. Pastikan repo "licence" ada dan public\n';
-        errorMsg += '2. Pastikan file licences.json ada di repo\n';
-        errorMsg += '3. Pastikan ada licence yang tersedia (belum digunakan)\n';
-        errorMsg += '4. Refresh website dan coba lagi\n\n';
-        errorMsg += '📌 Hubungi admin jika masalah berlanjut: @tuan_cpy';
+        alert('❌ Gagal mendapatkan licence!\n\n' + error.message + '\n\n📌 Hubungi admin: @tuan_cpy');
         
-        alert(errorMsg);
+        state.adCompleted = false;
+        state.adWaiting = false;
+        state.isProcessing = false;
         
-        // Reset ads
-        state.adsCompleted = 0;
-        state.adsData.forEach(ad => {
-            ad.completed = false;
-            ad.waiting = false;
-            ad.countdown = 0;
-            ad.clicked = false;
-        });
-        renderAds();
-        updateProgress();
+        const btn = document.getElementById('btnAd');
+        btn.disabled = false;
+        btn.textContent = '👆 Klik Iklan';
+        btn.className = 'btn-ad';
+        document.getElementById('adStatus').textContent = 'Coba lagi';
+        document.getElementById('adStatus').className = 'ad-status error';
+        
+        updateStep(0);
+        updateProgress(0);
     }
 }
 
@@ -350,7 +475,7 @@ function copyLicence() {
         const btn = document.querySelector('.btn-copy');
         const originalText = btn.textContent;
         btn.textContent = '✅ Copied!';
-        btn.style.borderColor = '#00ff88';
+        btn.style.borderColor = '#9b4dff';
         
         setTimeout(() => {
             btn.textContent = originalText;
@@ -367,9 +492,9 @@ function copyLicence() {
     });
 }
 
-// ============ CONFETTI EFFECT ============
+// ============ CONFETTI ============
 function createConfetti() {
-    const colors = ['#ff0066', '#ff00ff', '#00ff88', '#ffcc00', '#00ccff', '#ff6600'];
+    const colors = ['#9b4dff', '#7b2ffc', '#6a1b9a', '#b388ff', '#e040fb', '#ff4081'];
     
     for (let i = 0; i < 50; i++) {
         const confetti = document.createElement('div');
@@ -411,5 +536,11 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
-// ============ AUTO REFRESH STATUS ============
-setInterval(checkWebsiteStatus, 30000);
+// ============ AUTO REFRESH ============
+setInterval(() => {
+    updateUserCounter();
+}, 30000);
+
+// ============ EXPOSE GLOBAL ============
+window.handleAdClick = handleAdClick;
+window.copyLicence = copyLicence;
