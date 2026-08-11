@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scary Bot - Free Licence</title>
+    <title>Scary Bot - Get Free Key</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- ============ BACKGROUND PARTIKEL UNGU ============ -->
+    <!-- ============ BACKGROUND ============ -->
     <div class="bg-animation">
         <div class="glow-1"></div>
         <div class="glow-2"></div>
@@ -17,122 +17,110 @@
     </div>
 
     <!-- ============ MAIN CONTAINER ============ -->
-    <div class="container" id="app">
+    <div class="container">
         <!-- Header -->
         <div class="header">
             <div class="logo">
                 <span class="icon">👻</span>
-                <h1>SCARY BOT</h1>
+                <span class="brand">SCARY BOT</span>
+                <span class="badge">FREE</span>
             </div>
-            <div class="status-badge" id="statusBadge">
-                <span class="dot online"></span>
-                ONLINE
+            <div class="status-badge">
+                <span class="dot"></span>
+                <span class="status-text">ONLINE</span>
             </div>
         </div>
 
-        <!-- Main Card -->
-        <div class="card" id="mainCard">
-            <!-- Status Website -->
-            <div class="website-status" id="websiteStatus">
-                <div class="status-content">
-                    <span class="status-icon">🔴</span>
-                    <span class="status-text">WEBSITE TELAH DI TUTUP</span>
-                    <span class="status-sub">NOTE DEVELOPER SEDANG MENAMBAHKAN LICENCE KEY YANG BARU, HARAP DI TUNGGU DAN REFRESH WEBSITE UNTUK MEMUAT ULANG!</span>
+        <!-- ============ CARD ============ -->
+        <div class="card">
+            <!-- Title -->
+            <div class="card-title">
+                <h1>🎯 Get a <span>Free Key</span></h1>
+                <p>Complete the steps below to receive your access key</p>
+            </div>
+
+            <!-- ============ STEP INDICATOR ============ -->
+            <div class="step-indicator">
+                <div class="step-circle active" id="stepCircle1">
+                    <span class="step-number">1</span>
+                    <span class="step-label">STEP</span>
+                </div>
+                <div class="step-line" id="stepLine1"></div>
+                <div class="step-circle" id="stepCircle2">
+                    <span class="step-number">2</span>
+                    <span class="step-label">STEP</span>
+                </div>
+                <div class="step-line" id="stepLine2"></div>
+                <div class="step-circle" id="stepCircle3">
+                    <span class="step-number">3</span>
+                    <span class="step-label">STEP</span>
+                </div>
+                <div class="step-line" id="stepLine3"></div>
+                <div class="step-circle" id="stepCircle4">
+                    <span class="step-number">4</span>
+                    <span class="step-label">STEP</span>
+                </div>
+                <div class="step-line" id="stepLine4"></div>
+                <div class="step-circle" id="stepCircle5">
+                    <span class="step-number">5</span>
+                    <span class="step-label">STEP</span>
                 </div>
             </div>
 
-            <!-- Main Content -->
-            <div class="content" id="mainContent">
-                <!-- Title -->
-                <div class="title-section">
-                    <h2 class="glitch-text">🎯 FREE LICENCE</h2>
-                    <p class="subtitle">Dapatkan licence key gratis untuk Scary Bot V1</p>
-                    <div class="divider"></div>
-                </div>
+            <!-- ============ PROGRESS TEXT ============ -->
+            <div class="progress-text">
+                <span class="step-title" id="stepTitle">STEP 1 OF 5</span>
+                <span class="step-desc" id="stepDesc">Complete the ad below to continue</span>
+            </div>
 
-                <!-- ============ USER COUNTER ============ -->
-                <div class="user-counter">
-                    <div class="counter-box">
-                        <span class="counter-icon">👥</span>
-                        <span class="counter-label">Total Pengguna</span>
-                        <span class="counter-number" id="totalUsers">0</span>
-                    </div>
-                </div>
+            <!-- ============ PROGRESS BAR ============ -->
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBar" style="width: 0%"></div>
+            </div>
 
-                <!-- ============ STEP PROGRESS ============ -->
-                <div class="steps-container">
-                    <div class="step-item" id="step1">
-                        <div class="step-number">1</div>
-                        <div class="step-label">Klik Iklan</div>
-                        <div class="step-status" id="stepStatus1">⏳</div>
-                    </div>
-                    <div class="step-line" id="line1"></div>
-                    <div class="step-item" id="step2">
-                        <div class="step-number">2</div>
-                        <div class="step-label">Tunggu 3s</div>
-                        <div class="step-status" id="stepStatus2">⏳</div>
-                    </div>
-                    <div class="step-line" id="line2"></div>
-                    <div class="step-item" id="step3">
-                        <div class="step-number">3</div>
-                        <div class="step-label">Verifikasi</div>
-                        <div class="step-status" id="stepStatus3">⏳</div>
-                    </div>
-                    <div class="step-line" id="line3"></div>
-                    <div class="step-item" id="step4">
-                        <div class="step-number">4</div>
-                        <div class="step-label">Ambil Licence</div>
-                        <div class="step-status" id="stepStatus4">⏳</div>
-                    </div>
-                    <div class="step-line" id="line4"></div>
-                    <div class="step-item" id="step5">
-                        <div class="step-number">5</div>
-                        <div class="step-label">Selesai! 🎉</div>
-                        <div class="step-status" id="stepStatus5">⏳</div>
-                    </div>
-                </div>
-
-                <!-- Progress Bar -->
-                <div class="progress-container">
-                    <div class="progress-bar" id="progressBar" style="width: 0%"></div>
-                </div>
-                <div class="progress-text" id="progressText">0% - Mulai!</div>
-
-                <!-- Iklan Section -->
+            <!-- ============ MAIN CONTENT ============ -->
+            <div class="content-area" id="contentArea">
+                <!-- ===== ADS SECTION ===== -->
                 <div class="ads-section" id="adsSection">
-                    <div class="ads-box" id="adBox">
-                        <div class="ad-content">
-                            <span class="ad-icon" id="adIcon">🛒</span>
-                            <span class="ad-title" id="adTitle">Shopee</span>
-                            <span class="ad-sub" id="adSub">Belanja Online</span>
-                            <div class="ad-countdown" id="adCountdown" style="display: none;">
-                                <span class="countdown-number" id="countdownNumber">3</span>
-                                <span class="countdown-label">detik</span>
-                            </div>
-                            <button class="btn-ad" id="btnAd" onclick="handleAdClick()">
-                                👆 Klik Iklan
-                            </button>
-                            <div class="ad-status" id="adStatus">Selesaikan 1 iklan untuk unlock licence</div>
+                    <div class="ad-box">
+                        <div class="ad-icon" id="adIcon">🛒</div>
+                        <div class="ad-info">
+                            <div class="ad-title" id="adTitle">Shopee</div>
+                            <div class="ad-sub" id="adSub">Belanja Online</div>
                         </div>
+                        <div class="ad-countdown" id="adCountdown" style="display: none;">
+                            <span class="countdown-number" id="countdownNumber">3</span>
+                            <span class="countdown-label">s</span>
+                        </div>
+                        <button class="btn-ad" id="btnAd" onclick="handleAdClick()">
+                            <span class="btn-text">▶ Continue to Step</span>
+                        </button>
+                    </div>
+
+                    <div class="ad-status" id="adStatus">
+                        <span class="status-icon">🔒</span>
+                        <span class="status-text">Complete the ad to unlock your key</span>
                     </div>
                 </div>
 
-                <!-- Licence Section -->
+                <!-- ===== LICENCE SECTION ===== -->
                 <div class="licence-section" id="licenceSection" style="display: none;">
                     <div class="licence-header">
                         <span class="lock-icon">🔓</span>
-                        <span class="licence-title">LICENCE KEY</span>
+                        <span class="licence-title">YOUR FREE KEY</span>
                     </div>
                     
-                    <div class="licence-box" id="licenceBox">
+                    <div class="licence-box">
                         <div class="licence-key" id="licenceKey">SCARY-ABCD-EFGH-IJKL</div>
-                        <button class="btn-copy" onclick="copyLicence()">📋 Copy</button>
+                        <button class="btn-copy" onclick="copyLicence()">
+                            <span>📋 COPY</span>
+                        </button>
                     </div>
 
                     <div class="licence-info">
                         <div class="info-item">
-                            <span class="label">⏰ Expired</span>
-                            <span class="value" id="expiredDate">24 Jam</span>
+                            <span class="label">⏰ Expires</span>
+                            <span class="value" id="expiredDate">24 Hours</span>
                         </div>
                         <div class="info-item">
                             <span class="label">📦 Type</span>
@@ -146,7 +134,7 @@
 
                     <div class="licence-actions">
                         <button class="btn-primary" onclick="window.open('https://t.me/your_bot', '_blank')">
-                            💬 Beli Licence VIP
+                            💬 Buy VIP Licence
                         </button>
                         <button class="btn-secondary" onclick="window.open('https://github.com/pxlteam01/licence', '_blank')">
                             ⭐ GitHub
@@ -154,27 +142,24 @@
                     </div>
                 </div>
 
-                <!-- Loading -->
+                <!-- ===== LOADING ===== -->
                 <div class="loading-section" id="loadingSection" style="display: none;">
                     <div class="loader"></div>
-                    <span class="loading-text">⏳ Mencari licence tersedia...</span>
-                    <span class="loading-sub">Memeriksa server GitHub</span>
+                    <span class="loading-text">⏳ Processing your request...</span>
+                    <span class="loading-sub">Please wait</span>
                 </div>
             </div>
 
-            <!-- Footer -->
+            <!-- ============ SECURITY NOTICE ============ -->
+            <div class="security-notice">
+                <span class="shield">🔒</span>
+                <span class="notice-text">The use of bots or any kind of automation will result in your key being banned.</span>
+            </div>
+
+            <!-- ============ FOOTER ============ -->
             <div class="footer">
-                <div class="footer-user">
-                    <span>👥 <span id="totalUsersCount">0</span> Total Pengguna</span>
-                </div>
-                <div class="footer-links">
-                    <a href="#" onclick="window.open('https://t.me/your_bot', '_blank')">💬 Telegram</a>
-                    <a href="#" onclick="window.open('https://github.com/pxlteam01', '_blank')">🐙 GitHub</a>
-                    <a href="#" onclick="window.open('https://youtube.com', '_blank')">▶️ YouTube</a>
-                </div>
-                <div class="footer-copy">
-                    <span>© 2024 Scary Bot - By Tuan Kepala CPY</span>
-                </div>
+                <span class="footer-text">DEVELOPED BY <strong>MTH TEAM</strong></span>
+                <span class="footer-users">👥 <span id="totalUsers">0</span> Total Users</span>
             </div>
         </div>
     </div>
