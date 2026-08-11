@@ -1,0 +1,2 @@
+# scary-bot
+Scary
